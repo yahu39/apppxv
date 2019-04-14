@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { KeyboardAvoidingView, StyleSheet, ToastAndroid, View } from "react-native";
+import { Image, ImageBackground, KeyboardAvoidingView,
+   StyleSheet, ToastAndroid, View } from "react-native";
 import { Button, CheckBox, Input } from "react-native-elements"
 
 import firebase from './Firebase';
@@ -38,6 +39,10 @@ class LoginScreen extends Component {
     render(){
         return(
             <KeyboardAvoidingView style={styles.flex} behavior="padding" enabled>
+              <ImageBackground
+                source = { require('../assets/images/login-1.png')}
+                style = { styles.flex}
+              >
                 <View style = {[styles.flex, styles.section]}>
                     <Input
                     inputContainerStyle={styles.input_container_style}
@@ -69,6 +74,7 @@ class LoginScreen extends Component {
                     title="CONTINUAR"
                     />     
                 </View>
+              </ImageBackground>
             </KeyboardAvoidingView>    
         );
     }

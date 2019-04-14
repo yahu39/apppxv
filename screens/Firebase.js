@@ -3,12 +3,12 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD5prd8PUweBKsng65VZt4yCKkbyIQBwQc",
-    authDomain: "byvapp2019.firebaseapp.com",
-    databaseURL: "https://byvapp2019.firebaseio.com",
-    projectId: "byvapp2019",
-    storageBucket: "byvapp2019.appspot.com",
-    messagingSenderId: "319509726739"
+    apiKey: "AIzaSyDIZ1HStn-gjtbzBbssr5P2JqnMueB_7Z0",
+    authDomain: "apppxv-220020.firebaseapp.com",
+    databaseURL: "https://apppxv-220020.firebaseio.com",
+    projectId: "apppxv-220020",
+    storageBucket: "apppxv-220020.appspot.com",
+    messagingSenderId: "199813341131"
 };
 
 firebase.initializeApp(firebaseConfig);

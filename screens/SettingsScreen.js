@@ -30,7 +30,7 @@ export default class SettingsScreen extends React.Component {
   return(
     <View style={styles.Hola}>
                 <Button
-                title="Cerrar Sesion, YEAH!"
+                title="Cerrar Sesion, YEAH!gi"
                 onPress={() => this.logout()}
                 icon={
                     <Icon
