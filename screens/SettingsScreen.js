@@ -29,34 +29,29 @@ export default class SettingsScreen extends React.Component {
   //  return <ExpoConfigView />;
   return(
     <View style={styles.Hola}>
-                <Button
-                title="Cerrar Sesion, YEAH!gi"
-                onPress={() => this.logout()}
-                icon={
-                    <Icon
-                    name="md-arrow-round-back"
-                    type="ionicon"
-                    size={
-                        30 //titleStyle={{ fontWeight: "bold" }}
-                    }
-                    color="white"
-                    
-                    />
-                }
-                buttonStyle={
-                    {
-                    backgroundColor: "#CB4335",
-                    width: 250,
-                    height: 45,
-                    borderRadius: 50
-                    } //borderWidth: 0, //borderColor: "transparent",
-                }
-                />
-            </View>
+      <Button
+        title="Cerrar Sesión"
+        onPress={() => this.logout()}
+        icon={
+          <Icon
+          name="md-arrow-round-back"
+          type="ionicon"
+          size={ 30 }
+          color="white"
+          />}
+        buttonStyle={
+          {
+          backgroundColor: "#CB4335",
+          width: 250,
+          height: 45,
+          borderRadius: 50
+          } //borderWidth: 0, //borderColor: "transparent",
+        }
+        />
+    </View>
 
   )
-
-  }
+}
 }
 
 const styles = StyleSheet.create({

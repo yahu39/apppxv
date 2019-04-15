@@ -44,9 +44,14 @@ class LoginScreen extends Component {
                 style = { styles.flex}
               >
                 <View style = {[styles.flex, styles.section]}>
+                    <Image
+                      style = { styles.logo}
+                      source = { require('../assets/images/1.png')}
+                    />
                     <Input
                     inputContainerStyle={styles.input_container_style}
                     inputStyle={styles.input_style}
+                    leftIcon={{type: 'font-awesome', name: 'user', color: 'rgba(80, 80, 80, 1)', paddingHorizontal: 5}}
                     onChangeText={ email => this.setState({ email: email}) }
                     placeholder='Usuario'
                     shake
@@ -54,6 +59,7 @@ class LoginScreen extends Component {
                     <Input
                     inputContainerStyle={styles.input_container_style}
                     inputStyle={styles.input_style}
+                    leftIcon={{type: 'font-awesome', name: 'lock', color: 'rgba(80, 80, 80, 1)', paddingHorizontal: 5}}
                     onChangeText={ password => this.setState({ password: password}) }
                     placeholder='Contraseña'
                     secureTextEntry={this.state.security}
