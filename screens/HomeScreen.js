@@ -45,35 +45,36 @@ _handleBarCodeRead = data => {
   });
   console.log(data.data);
   fireStoreDataBase
-  .collection("Productos")
-  .doc(data.data)
-  .get()
-  .then(doc => {
-    if (doc.exists) {
-      console.log("Document data:", doc.data());
-      this.setState({
+    .collection("Productos")
+    .doc(data.data)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        this.setState({
+          //
         TextName: doc.data().PRODUCTO,
         PlazoRetiro: doc.data().PLAZORETIRO,
         isCorrect: true,
         isCargando: false
       });
-    } else {
-      console.log("No such document!");
-      this.setState({
-        TextName: "PRODUCTO NO REGISTRADO",
+      } else {
+        console.log("No such document!");
+          this.setState({
+          TextName: "PRODUCTO NO REGISTRADO",
+          isCorrect: false,
+          isCargando: false
+          });
+        }
+    })
+      .catch(error => {
+        console.log("Error getting document:", error);
+        this.setState({
+        TextName: "ERROR AL BUSCAR",
         isCorrect: false,
         isCargando: false
+        });
       });
-    }
-  })
-  .catch(error => {
-    console.log("Error getting document:", error);
-    this.setState({
-      TextName: "ERROR AL BUSCAR",
-      isCorrect: false,
-      isCargando: false
-    });
-  });
 };
 
   Barcode() {
@@ -191,7 +192,7 @@ _handleBarCodeRead = data => {
               <Input
                 onChangeText={cantidad =>
                   this.setState(
-                    { InputEan: parseInt(ean) }
+                    { InputCantidad: parseInt(cantidad) }
                   )
                 }
                 placeholder="Cantidad"
@@ -240,7 +241,7 @@ _handleBarCodeRead = data => {
               <Input
                 onChangeText={cantidad =>
                   this.setState(
-                    { InputEan: parseInt(ean) }
+                    { InputCantidad: parseInt(cantidad) }
                   )
                 }
                 placeholder="Cantidad"
@@ -287,7 +288,7 @@ _handleBarCodeRead = data => {
               <Input
                 onChangeText={cantidad =>
                   this.setState(
-                    { InputEan: parseInt(ean) }
+                    { InputCantidad: parseInt(ean) }
                   )
                 }
                 placeholder="Cantidad"
