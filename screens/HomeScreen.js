@@ -77,6 +77,99 @@ export default class HomeScreen extends React.Component {
       });
   };
 
+  GuardarData() {
+    var Retiro = new Date(this.state.spinnerText);
+    console.log(Retiro.toLocaleDateString());
+    var Vencimiento = new Date(Retiro.toLocaleDateString());
+    console.log(Vencimiento);
+    Vencimiento = new Date(Vencimiento).setDate(
+      Vencimiento.getDate() - this.state.PlazoRetiro
+    );
+    console.log(Vencimiento);
+    console.log(new Date(parseInt(Vencimiento, 10)));
+    const Hoy = new Date();
+    const Mas7Dias = new Date().setDate(Hoy.getDate() + 7);
+    const Mas30Dias = new Date().setDate(Hoy.getDate() + 30);
+    //const Mas100Dias = new Date().setDate(Hoy.getDate() + 100);
+    console.log(this.state);
+    console.log(this.state.PlazoRetiro);
+    console.log(Retiro);
+    console.log(Hoy);
+    fireStoreDataBase
+      .collection("Registro")
+      .doc(this.state.TextCodBarras)
+      .set({
+        Nombre: this.state.TextName,
+        Cantidad: this.state.InputCantidad,
+        Ubicacion: this.state.InputUbicacion,
+        Vencimiento: new Date(this.state.spinnerText),
+        PlazoRetiro: new Date(parseInt(Vencimiento, 10)),
+        Usuario: firebase.auth().currentUser.uid,
+        FechaGuardado: new Date()
+      })
+      .then(() => {
+        console.log("Document successfully updated!");
+        {
+          (Vencimiento < Hoy &&
+            Alert.alert(
+              "Guardado Correctamente",
+              "URGENTE:\n\tProducto en Rojo.\n\tProducto por Retirar",
+              [
+                {
+                  text: "OK",
+                  onPress: () => console.log("Ok Pressed")
+                }
+              ]
+            )) ||
+            (Vencimiento < Mas7Dias &&
+              Vencimiento > Hoy &&
+              Alert.alert(
+                "Guardado Correctamente",
+                "AVISO:\n\tProducto en Amarillo.\n\tProgramar Retiro del Producto",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => console.log("Ok Pressed")
+                  }
+                ]
+              )) ||
+            (Vencimiento < Mas30Dias &&
+              Vencimiento > Mas7Dias &&
+              Alert.alert(
+                "Guardado Correctamente",
+                "AVISO:\n\tProducto en Verde.\n\tProducto por Liquidar",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => console.log("Ok Pressed")
+                  }
+                ]
+              )) ||
+            (Vencimiento > Mas30Dias &&
+              Alert.alert(
+                "Guardado Correctamente",
+                "AVISO:\n\tProducto en Verde.\n\tProducto por Liquidar",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => console.log("Ok Pressed")
+                  }
+                ]
+              ));
+        }
+      })
+      .catch(function(error) {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+        Alert.alert("ERROR", "No se guardó correctamente el Producto", [
+          {
+            text: "OK",
+            onPress: () => console.log("Ok Pressed")
+          }
+        ]);
+      });
+  }
+  
   Barcode() {
     this.setState({ isVisible: true });
     this._requestCameraPermission();
@@ -260,7 +353,7 @@ export default class HomeScreen extends React.Component {
                   {this.state.isCorrect ? (
                     <Icon
                       reverse
-                      name="md-pricetags"
+                      name="md-locate"
                       type="ionicon"
                       color="#5FA62C"
                     >
@@ -268,7 +361,7 @@ export default class HomeScreen extends React.Component {
                   ) : (
                       <Icon
                         reverse
-                        name="md-pricetags"
+                        name="md-locate"
                         type="ionicon"
                         color="#c6c6c6"
                       >
@@ -469,59 +562,63 @@ export default class HomeScreen extends React.Component {
                 </View>
               </View>
           ))}
-
+          { this.state.isCargando ? (
+            <View style = { styles.container } />
+          ): (  
           <View style={styles.container}>
-            {this.state.isCorrect ? (
-              <Button
-                title="Guardar"
-                onPress={() => this.GuardarData()}
-                icon={
-                  <Icon
-                    name="md-cloud-upload"
-                    type="ionicon"
-                    size={
-                      30 //titleStyle={{ fontWeight: "bold" }}
-                    }
-                    color="white"
-                  />
-                }
-                buttonStyle={
-                  {
-                    backgroundColor: "rgba(95, 162,44, 1)",
-                    width: 300,
-                    height: 45,
-                    borderRadius: 50
-                  } //borderWidth: 0, //borderColor: "transparent",
-                }
-              />
+           {this.state.isCorrect ? (
+             <Button
+               title="Guardar"
+               onPress={() => this.GuardarData()}
+               icon={
+                 <Icon
+                   name="md-cloud-upload"
+                   type="ionicon"
+                   size={
+                     30 //titleStyle={{ fontWeight: "bold" }}
+                   }
+                   color="white"
+                 />
+               }
+               buttonStyle={
+                 {
+                   backgroundColor: "rgba(95, 162,44, 1)",
+                   width: 300,
+                   height: 45,
+                   borderRadius: 50
+                 } //borderWidth: 0, //borderColor: "transparent",
+               }
+             />
             ) : (
-                <Button
-                  title="Guardar"
-                  disabled={true}
-                  icon={
-                    <Icon
-                      name="md-cloud-upload"
-                      type="ionicon"
-                      size={
-                        30 //titleStyle={{ fontWeight: "bold" }}
-                      }
-                      color="white"
-                    />
-                  }
-                  buttonStyle={
-                    {
-                      backgroundColor: "rgba(198, 198,198, 1)",
-                      width: 300,
-                      height: 45,
-                      borderRadius: 50
-                    } //borderWidth: 0, //borderColor: "transparent",
-                  }
-                />
-              )}
-          </View>
-        </View>
+               <Button
+                 title="Guardar"
+                 disabled={true}
+                 icon={
+                   <Icon
+                     name="md-cloud-upload"
+                     type="ionicon"
+                     size={
+                       30 //titleStyle={{ fontWeight: "bold" }}
+                     }
+                     color="white"
+                   />
+                 }
+                 buttonStyle={
+                   {
+                     backgroundColor: "rgba(198, 198,198, 1)",
+                     width: 300,
+                     height: 45,
+                     borderRadius: 50
+                   } //borderWidth: 0, //borderColor: "transparent",
+                 }
+               />
+             )}
+         </View>
+            
+        )}
+       </View>
       </SafeAreaView>
-    )
+    );
   }
 }
 

@@ -12,7 +12,7 @@ export default createAppContainer(createSwitchNavigator(
   Main: MainTabNavigator,
   },
   {
-    //initialRouteName: "Login"
-    initialRouteName: "Main"
+    initialRouteName: "Login"
+    //initialRouteName: "Main"
   }
   ));
