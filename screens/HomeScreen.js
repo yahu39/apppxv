@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Header, Input, Button, Icon, Text, Overlay } from "react-native-elements";
-import {
-  View, StyleSheet, SafeAreaView, Image, Picker,
+import {   View, StyleSheet, SafeAreaView, Image, Picker, 
   Alert, DatePickerAndroid, ActivityIndicator, TouchableWithoutFeedback
 } from "react-native";
 import { BarCodeScanner, Permissions } from "expo";
@@ -83,6 +82,25 @@ export default class HomeScreen extends React.Component {
     this._requestCameraPermission();
   }
 
+  showPicker = async (stateKey, options) => {
+    console.log(options);
+    try {
+      var newState = {};
+      const { action, year, month, day } = await DatePickerAndroid.open(
+        options
+      );
+      if (action === DatePickerAndroid.dismissedAction){
+        newState[stateKey + "Text"] = "dismissed";
+      } else {
+        var date = new Date( year, month, day);
+        newState[stateKey + "Text"] = date.toLocaleDateString();
+        newState[stateKey + "Date"] = date;
+      }
+      this.setState(newState);
+    } catch({ code, message }){
+        console.warn(`Error in example '${stateKey}': `, message);
+    }
+  };
 
   render() {
     return (
@@ -393,56 +411,65 @@ export default class HomeScreen extends React.Component {
                       </Input>
                     )}
                 </View>
-              </View>
+              </View>             
               )
           }
-          <View style={styles.container}>
-            <View style={{ flex: 2, alignItems: "center" }}>
-              {this.state.isCorrect ? (
-                <Icon
-                  reverse
-                  name="md-pricetags"
-                  type="ionicon"
-                  color="#5FA62C"
-                >
-                </Icon>
-              ) : (
+          {(this.state.isCargando && <View style= { styles.container } /> ) ||
+            ((this.state.isCorrect && (
+              <TouchableWithoutFeedback
+                onPress = { this.showPicker.bind(this, "spinner", {
+                  date: this.state.presetDate
+                })}
+              >
+              <View style = { styles.container}>
+                <View style = {{ flex: 2, alignItems: "center"}}>
+                  <Icon 
+                    reverse
+                    name = "md-calendar"
+                    type = "ionicon"
+                    color = "#5FA62C"
+                  />
+                </View>
+                <View style = {{ flex: 5, paddingRight: 5}}>
+                  <View>
+                    <Input
+                      label = "Fecha"
+                      placeholder = "Seleccione una fecha"
+                      value = {this.state.spinnerText}
+                      inputContainerStyle = {{
+                        height: 800,
+                        borderBottomColor: "rgba(220, 220, 220, .6"
+                      }}
+                      errorStyle = {{ color: "red"}}
+                      errorMessage = "Ingrese una fecha Válida"
+                      editable = {false}
+                    />
+                  </View>
+                </View>
+              </View>
+              </TouchableWithoutFeedback>  
+            )) || (
+              <View style = {styles.container}>
+                <View style = { {flex: 2, alignItems: "center" }}>
                   <Icon
                     reverse
-                    name="md-pricetags"
-                    type="ionicon"
-                    color="#c6c6c6"
-                  >
-                  </Icon>
-                )}
-            </View>
-            <View style={{ flex: 5, paddingRight: 5 }}>
-              {this.state.isCorrect ? (
-                <Input
-                  onChangeText={cantidad =>
-                    this.setState(
-                      { InputCantidad: parseInt(cantidad) }
-                    )
-                  }
-                  placeholder="Cantidad"
-                  keyboardType="numeric"
-                  inputContainerStyle={{
-                    height: 800,
-                    borderBottomColor: "rgba(220,220,220,.6)"
-                  }}
-                  errorStyle={{ color: "red" }}
-                >
-                </Input>
-              ) : (
-                  <Input
-                    editable={false}
-                    placeholder="Cantidad"
-                    inputContainerStyle={{ height: 800 }}
-                  >
-                  </Input>
-                )}
-            </View>
-          </View>
+                    name = "md-calendar"
+                    type = "ionicon"
+                    color = "#c6c6c6"
+                  />
+                </View>
+                <View style = {{flex: 5, paddingRight: 5 }}>
+                  <View>
+                    <Input
+                      placeholder = "Seleccione una fecha"
+                      inputContainerStyle = { { height: 800 }}
+                      editable = { false}
+                    />
+                  </View>
+                </View>
+              </View>
+          ))}
+
           <View style={styles.container}>
             {this.state.isCorrect ? (
               <Button
